@@ -1,12 +1,15 @@
 
 import tkinter as tk
+from map import *
 
-rot = tk.Tk()
-c = tk.Canvas(rot, width=640, height=640)
-c.create_text(100, 100, text="Hello, World!")
-c.grid()
+# root = tk.Tk()
+# t = tk.Text(root)
 
-rot.mainloop()
+m = Map(16, 9)
+print(m.map_string)
 
-print("Hello, PyXRobots!")
+# t.insert(tk.INSERT, m.map_string)
+# t.grid()
+
+# root.mainloop()
 
