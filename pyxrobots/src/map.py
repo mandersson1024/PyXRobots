@@ -1,12 +1,11 @@
 class Map:
 
-    def __init__(self, width, height):
+    def __init__(self, width: int, height: int):
         self.width = width
         self.height = height
-        pass
 
     @property
-    def map_string(self):
+    def map_string(self) -> str:
         s = ""
 
         for y in range(0, self.height):
