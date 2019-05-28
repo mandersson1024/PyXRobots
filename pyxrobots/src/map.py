@@ -42,26 +42,6 @@ class Map:
     def player_move_down_right(self) -> None:
         self.player_move(1, 1)
 
-    def execute_player_action(self, key: str) -> None:
-        if key == 'q':
-            self.player_move_up_left()
-        elif key == 'w':
-            self.player_move_up()
-        if key == 'e':
-            self.player_move_up_right()
-        elif key == 'a':
-            self.player_move_left()
-        elif key == 's':
-            self.player_dont_move()
-        if key == 'd':
-            self.player_move_right()
-        elif key == 'z':
-            self.player_move_down_left()
-        if key == 'x':
-            self.player_move_down()
-        elif key == 'c':
-            self.player_move_down_right()
-
     @property
     def map_string(self) -> str:
         s = ""

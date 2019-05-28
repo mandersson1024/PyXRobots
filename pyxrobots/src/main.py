@@ -15,10 +15,26 @@ while running:
     keypress = wait_for_keypress()
     if keypress == chr(27):  # 27 is ESC
         running = False
-    else:
-        m.execute_player_action(keypress)
+    elif keypress == 'q':
+        m.player_move_up_left()
+    elif keypress == 'w':
+        m.player_move_up()
+    if keypress == 'e':
+        m.player_move_up_right()
+    elif keypress == 'a':
+        m.player_move_left()
+    elif keypress == 's':
+        m.player_dont_move()
+    if keypress == 'd':
+        m.player_move_right()
+    elif keypress == 'z':
+        m.player_move_down_left()
+    if keypress == 'x':
+        m.player_move_down()
+    elif keypress == 'c':
+        m.player_move_down_right()
+
 
 # TODO
-# - Player/Map bounds checks
-# - Use of special keys (ESC/Enter)
+# - implement undo
 
