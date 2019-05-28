@@ -1,7 +1,6 @@
 
 import tkinter as tk
 import msvcrt
-from os import system
 
 
 class Output:

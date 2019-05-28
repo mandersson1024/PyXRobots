@@ -9,12 +9,13 @@ output = ConsoleOutput()
 # output = WindowUI()
 
 
-output.display(m.map_string)
-
-keypress = wait_for_keypress()
-m.execute_player_action(keypress)
-
-output.display(m.map_string)
-
+running = True
+while running:
+    output.display(m.map_string)
+    keypress = wait_for_keypress()
+    if keypress == ' ':
+        running = False
+    else:
+        m.execute_player_action(keypress)
 
 
