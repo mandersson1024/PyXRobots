@@ -1,7 +1,9 @@
 
 import tkinter as tk
+import msvcrt
 
-class UI:
+
+class Output:
     def __init__(self):
         pass
 
@@ -12,7 +14,7 @@ class UI:
         pass
 
 
-class ConsoleUI(UI):
+class ConsoleOutput(Output):
     def __init__(self):
         super().__init__()
 
@@ -20,7 +22,7 @@ class ConsoleUI(UI):
         print(map_string)
 
 
-class WindowUI(UI):
+class WindowOutput(Output):
     def __init__(self):
         super().__init__()
         self.root = tk.Tk()
@@ -36,4 +38,7 @@ class WindowUI(UI):
         self.root.mainloop()
 
 
-
+def wait_for_keypress() -> str:
+    while True:
+        if msvcrt.kbhit():
+            return msvcrt.getch()
