@@ -42,4 +42,4 @@ class WindowOutput(Output):
 def wait_for_keypress() -> str:
     while True:
         if msvcrt.kbhit():
-            return msvcrt.getch().decode('ASCII')
+            return msvcrt.getch().decode()

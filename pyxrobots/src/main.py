@@ -13,9 +13,12 @@ running = True
 while running:
     output.display(m.map_string)
     keypress = wait_for_keypress()
-    if keypress == ' ':
+    if keypress == chr(27):  # 27 is ESC
         running = False
     else:
         m.execute_player_action(keypress)
 
+# TODO
+# - Player/Map bounds checks
+# - Use of special keys (ESC/Enter)
 
