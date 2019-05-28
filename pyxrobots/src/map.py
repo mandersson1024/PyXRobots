@@ -5,6 +5,13 @@ class Map:
         self.height = height
         self.player_position = (0, 0)
 
+    def move_player(self, dx, dy):
+        self.player_position = (self.player_position[0] + dx, self.player_position[1] + dy)
+
+    def execute_player_action(self, key: str) -> None:
+        if key == 'a':
+            self.move_player(-1, 0)
+
     @property
     def map_string(self) -> str:
         s = ""

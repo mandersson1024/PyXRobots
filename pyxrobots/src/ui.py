@@ -1,6 +1,7 @@
 
 import tkinter as tk
 import msvcrt
+from os import system
 
 
 class Output:
@@ -19,6 +20,7 @@ class ConsoleOutput(Output):
         super().__init__()
 
     def display(self, map_string: str) -> None:
+        print()
         print(map_string)
 
 
@@ -41,4 +43,4 @@ class WindowOutput(Output):
 def wait_for_keypress() -> str:
     while True:
         if msvcrt.kbhit():
-            return msvcrt.getch()
+            return msvcrt.getch().decode('ASCII')
