@@ -5,34 +5,41 @@ class Map:
         self.height = height
         self.player_position = (0, 0)
 
-    def player_move(self, dx, dy):
-        self.player_position = (self.player_position[0] + dx, self.player_position[1] + dy)
+    def is_position_within_bounds(self, pos) -> bool:
+        x = pos[0]
+        y = pos[1]
+        return 0 <= x < self.width and 0 <= y < self.height
 
-    def player_move_up_left(self):
+    def player_move(self, dx, dy) -> None:
+        new_position = (self.player_position[0] + dx, self.player_position[1] + dy)
+        if self.is_position_within_bounds(new_position):
+            self.player_position = new_position
+
+    def player_move_up_left(self) -> None:
         self.player_move(-1, -1)
 
-    def player_move_up(self):
+    def player_move_up(self) -> None:
         self.player_move(0, -1)
 
-    def player_move_up_right(self):
+    def player_move_up_right(self) -> None:
         self.player_move(1, -1)
 
-    def player_move_left(self):
+    def player_move_left(self) -> None:
         self.player_move(-1, 0)
 
-    def player_dont_move(self):
+    def player_dont_move(self) -> None:
         self.player_move(0, 0)
 
-    def player_move_right(self):
+    def player_move_right(self) -> None:
         self.player_move(1, 0)
 
-    def player_move_down_left(self):
+    def player_move_down_left(self) -> None:
         self.player_move(-1, 1)
 
-    def player_move_down(self):
+    def player_move_down(self) -> None:
         self.player_move(0, 1)
 
-    def player_move_down_right(self):
+    def player_move_down_right(self) -> None:
         self.player_move(1, 1)
 
     def execute_player_action(self, key: str) -> None:
