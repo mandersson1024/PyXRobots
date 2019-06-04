@@ -6,6 +6,7 @@ from ui import *
 m = Map(16, 9)
 m.player_position = (2, 5)
 m.enemy_positions = [(1, 1), (8, 8)]
+m.trash_piles = [(1, 3)]
 output = ConsoleOutput()
 # output = WindowUI()
 
@@ -44,6 +45,10 @@ while running:
 
 # TODO
 # - implement trash piles
+#   - trash pile block enemy movement
+#   - trash pile kill enemy
+#   - enemy-enemy collision creates trash pile
 # - implement random start positions
+# - implement levels, main menu, instructions
 # - refactor to implement undo by Command pattern
 
