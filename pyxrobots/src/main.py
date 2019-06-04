@@ -44,6 +44,7 @@ while running:
 
 
 # TODO
+# - attempting blocked movement should not trigger enemy movement
 # - implement trash piles
 #   - trash pile block enemy movement
 #   - trash pile kill enemy
