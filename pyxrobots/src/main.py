@@ -44,6 +44,8 @@ while running:
 
 
 # TODO
+# - implement undo
+#   - test undo by unit testing
 # - attempting blocked movement should not trigger enemy movement
 # - implement trash piles
 #   - trash pile block enemy movement
@@ -51,5 +53,4 @@ while running:
 #   - enemy-enemy collision creates trash pile
 # - implement random start positions
 # - implement levels, main menu, instructions
-# - refactor to implement undo by Command pattern
 
