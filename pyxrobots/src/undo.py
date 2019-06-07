@@ -30,3 +30,11 @@ class UndoHistory:
         command = self.redo_history.pop(0)
         self.undo_history.insert(0, command)
         return command
+
+    @property
+    def num_undo_steps(self) -> int:
+        return len(self.undo_history)
+
+    @property
+    def num_redo_steps(self) -> int:
+        return len(self.redo_history)
