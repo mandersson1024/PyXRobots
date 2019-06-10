@@ -35,7 +35,19 @@ class UndoHistoryTestCase(unittest.TestCase):
         self.assertEqual(history.num_undo_steps, 1)
         self.assertEqual(history.num_redo_steps, 0)
 
-    def test_execute_undo(self):
+    def test_clear_redo_stack_after_undo_do(self):
+        history = undo.UndoHistory()
+        history.do(undo.Command(lambda: None, lambda: None))
+        history.do(undo.Command(lambda: None, lambda: None))
+        history.undo()
+        history.undo()
+        self.assertEqual(history.num_undo_steps, 0)
+        self.assertEqual(history.num_redo_steps, 2)
+        history.do(undo.Command(lambda: None, lambda: None))
+        self.assertEqual(history.num_undo_steps, 1)
+        self.assertEqual(history.num_redo_steps, 0)
+
+    def test_do_undo(self):
         history = undo.UndoHistory()
         self.counter: int = 0
         def add_one(): self.counter = self.counter + 1

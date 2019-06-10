@@ -19,8 +19,10 @@ class CommandStack:
         self.stack.insert(0, command)
 
     def pop(self) -> Command:
-        # todo: check for empty list
         return self.stack.pop(0)
+
+    def clear(self) -> None:
+        self.stack.clear()
 
     @property
     def size(self) -> int:
@@ -33,18 +35,21 @@ class UndoHistory:
         self.redo_history: CommandStack = CommandStack()
 
     def do(self, command: Command):
+        self.redo_history.clear()
         self.undo_history.push(command)
         command.execute()
 
     def undo(self) -> None:
-        command: Command = self.undo_history.pop()
-        self.redo_history.push(command)
-        command.undo()
+        if self.undo_history.size > 0:
+            command: Command = self.undo_history.pop()
+            self.redo_history.push(command)
+            command.undo()
 
     def redo(self) -> None:
-        command: Command = self.redo_history.pop()
-        self.undo_history.push(command)
-        command.execute()
+        if self.redo_history.size > 0:
+            command: Command = self.redo_history.pop()
+            self.undo_history.push(command)
+            command.execute()
 
     @property
     def num_undo_steps(self) -> int:
