@@ -1,14 +1,22 @@
 
 from map import *
 from ui import *
+from main_menu import *
 
 
-m = Map(16, 9)
+output = ConsoleOutput()
+# output = WindowOutput()
+
+show_main_menu: bool = True
+
+if show_main_menu:
+    output.display(main_menu_text)
+    wait_for_keypress()
+
+m = Map(30, 22)
 m.player_position = (2, 5)
 m.enemy_positions = [(1, 1), (8, 8)]
 m.trash_piles = [(1, 3)]
-output = ConsoleOutput()
-# output = WindowUI()
 
 keys_up_left = ['q', '7']
 keys_up = ['w', '8']

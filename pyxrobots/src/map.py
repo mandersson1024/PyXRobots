@@ -65,7 +65,7 @@ class Map:
                 if (x, y) == self.player_position:
                     s += '@'
                 elif (x, y) in self.enemy_positions:
-                    s += 'X'
+                    s += '+'
                 else:
                     s += '·'
             s += '\n'
