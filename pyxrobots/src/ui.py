@@ -1,45 +1,19 @@
 
 import tkinter as tk
-import msvcrt
 
 
-class Output:
-    def __init__(self):
-        pass
-
-    def display(self, map_string: str) -> None:
-        raise NotImplemented
-
-    def hold(self) -> None:
-        pass
-
-
-class ConsoleOutput(Output):
-    def __init__(self):
+class WindowUI(tk.Tk):
+    def __init__(self, keypress_callback: callable):
         super().__init__()
 
-    def display(self, map_string: str) -> None:
-        print()
-        print(map_string)
+        def on_key_release(event) -> None:
+            keypress_callback(event.char)
 
-
-class WindowOutput(Output):
-    def __init__(self):
-        super().__init__()
-        self.root = tk.Tk()
-        self.text_field = tk.Text(self.root)
-        self.text_field.grid()
+        self.bind("<KeyRelease>", on_key_release)
+        self.label = tk.Label(self, font=("Courier", 16), padx=25, pady=25)
 
     def display(self, s: str) -> None:
-        self.text_field.insert(tk.INSERT, s)
-        self.text_field.grid()
-        self.root.update()
+        self.label.config(text=s)
+        self.label.pack()
+        self.update()
 
-    def hold(self) -> None:
-        self.root.mainloop()
-
-
-def wait_for_keypress() -> str:
-    while True:
-        if msvcrt.kbhit():
-            return msvcrt.getch().decode()

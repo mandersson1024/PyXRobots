@@ -4,14 +4,10 @@ from ui import *
 from main_menu import *
 
 
-output = ConsoleOutput()
-# output = WindowOutput()
-
 show_main_menu: bool = True
 
-if show_main_menu:
-    output.display(main_menu_text)
-    wait_for_keypress()
+# if show_main_menu:
+#     output.display(main_menu_text)
 
 m = Map(30, 22)
 m.player_position = (2, 5)
@@ -50,25 +46,19 @@ def move_player_according_to_keypress(key: str) -> None:
         m.player_move_down_right()
 
 
-running = True
-while running:
-    output.display(m.map_string)
-    keypress = wait_for_keypress()
-    if keypress == chr(27):  # 27 is ESC
-        running = False
-    else:
-        move_player_according_to_keypress(keypress)
+def on_keypress(key):
+    print('key: ' + key)
+    move_player_according_to_keypress(key)
     m.move_all_enemies()
+    window_ui.display(m.map_string)
 
 
-# TODO
-# - implement undo
-#   - test undo by unit testing
-# - attempting blocked movement should not trigger enemy movement
-# - implement trash piles
-#   - trash pile block enemy movement
-#   - trash pile kill enemy
-#   - enemy-enemy collision creates trash pile
-# - implement random start positions
-# - implement levels, main menu, instructions
+def end_application(_):
+    exit()
+
+
+window_ui = WindowUI(on_keypress)
+window_ui.bind('<Escape>', end_application)
+window_ui.display(m.map_string)
+window_ui.mainloop()
 
