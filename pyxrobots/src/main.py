@@ -2,6 +2,7 @@
 from map import *
 from ui import *
 from main_menu import *
+import undo
 
 
 show_main_menu: bool = True
@@ -13,6 +14,8 @@ m = Map(30, 22)
 m.player_position = (2, 5)
 m.enemy_positions = [(1, 1), (8, 8)]
 m.trash_piles = [(1, 3)]
+
+undo_history = undo.UndoHistory()
 
 keys_up_left = ['q', '7']
 keys_up = ['w', '8']
@@ -48,8 +51,41 @@ def move_player_according_to_keypress(key: str) -> None:
 
 def on_keypress(key):
     print('key: ' + key)
-    move_player_according_to_keypress(key)
-    m.move_all_enemies()
+
+    if is_quit_key(key):
+        exit()
+
+    elif is_undo_key(key):
+        undo....
+
+    elif is_redo_key(key):
+        redo...
+
+    elif is_action_key(key):
+        old_player_position = m.player_position
+        old_enemy_positions = list(m.enemy_positions)
+        old_trash_piles = list(m.trash_piles)
+
+        move_player_according_to_keypress(key)
+        m.move_all_enemies()
+
+        new_player_position = m.player_position
+        new_enemy_positions = list(m.enemy_positions)
+        new_trash_piles = list(m.trash_piles)
+
+        def do_function() -> None:
+            m.player_position = new_player_position
+            m.enemy_positions = new_enemy_positions
+            m.trash_piles = new_trash_piles
+
+        def undo_function() -> None:
+            m.player_position = old_player_position
+            m.enemy_positions = old_enemy_positions
+            m.trash_piles = old_trash_piles
+
+        step = undo.Command(do_function, undo_function)
+        undo_history.do(step)
+
     window_ui.display(m.map_string)
 
 
