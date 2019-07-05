@@ -104,8 +104,11 @@ def on_keypress(key: str) -> None:
 
     window_ui.display(m.map_string)
 
+
 # TODO: Do 2 steps, undo 2 steps, redo 1 step.
 # TODO: Enemies move 2 steps.
+
+# TODO: Add ControlActions constants and return them from UI instead of keycodes.
 
 window_ui = WindowUI(on_keypress)
 window_ui.display(m.map_string)
