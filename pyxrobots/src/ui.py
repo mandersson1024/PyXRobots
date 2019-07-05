@@ -7,7 +7,7 @@ class WindowUI(tk.Tk):
         super().__init__()
 
         def on_key_release(event) -> None:
-            keypress_callback(event.char)
+            keypress_callback(event.keysym)
 
         self.bind("<KeyRelease>", on_key_release)
         self.label = tk.Label(self, font=("Courier", 16), padx=25, pady=25)

@@ -55,10 +55,16 @@ class UndoHistoryTestCase(unittest.TestCase):
         command = undo.Command(add_one, subtract_one)
         history.do(command)
         self.assertEqual(self.counter, 1)
+        history.do(command)
+        self.assertEqual(self.counter, 2)
+        history.undo()
+        self.assertEqual(self.counter, 1)
         history.undo()
         self.assertEqual(self.counter, 0)
         history.redo()
         self.assertEqual(self.counter, 1)
+        history.redo()
+        self.assertEqual(self.counter, 2)
 
 
 if __name__ == '__main__':

@@ -49,29 +49,45 @@ def move_player_according_to_keypress(key: str) -> None:
         m.player_move_down_right()
 
 
-def on_keypress(key):
+def is_quit_key(key: str) -> bool:
+    return key == 'Escape'
+
+
+def is_undo_key(key: str) -> bool:
+    return key == 'Left'
+
+
+def is_redo_key(key: str) -> bool:
+    return key == 'Right'
+
+
+def is_action_key(key: str) -> bool:
+    return key in ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w', 'e', 'a', 's', 'd', 'z', 'x', 'c']
+
+
+def on_keypress(key: str) -> None:
     print('key: ' + key)
 
     if is_quit_key(key):
         exit()
 
     elif is_undo_key(key):
-        undo....
+        undo_history.undo()
 
     elif is_redo_key(key):
-        redo...
+        undo_history.redo()
 
     elif is_action_key(key):
         old_player_position = m.player_position
-        old_enemy_positions = list(m.enemy_positions)
-        old_trash_piles = list(m.trash_piles)
+        old_enemy_positions = m.enemy_positions.copy()
+        old_trash_piles = m.trash_piles.copy()
 
         move_player_according_to_keypress(key)
         m.move_all_enemies()
 
         new_player_position = m.player_position
-        new_enemy_positions = list(m.enemy_positions)
-        new_trash_piles = list(m.trash_piles)
+        new_enemy_positions = m.enemy_positions.copy()
+        new_trash_piles = m.trash_piles.copy()
 
         def do_function() -> None:
             m.player_position = new_player_position
@@ -88,13 +104,10 @@ def on_keypress(key):
 
     window_ui.display(m.map_string)
 
-
-def end_application(_):
-    exit()
-
+# TODO: Do 2 steps, undo 2 steps, redo 1 step.
+# TODO: Enemies move 2 steps.
 
 window_ui = WindowUI(on_keypress)
-window_ui.bind('<Escape>', end_application)
 window_ui.display(m.map_string)
 window_ui.mainloop()
 
