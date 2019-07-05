@@ -11,9 +11,12 @@ show_main_menu: bool = True
 #     output.display(main_menu_text)
 
 m = Map(30, 22)
-m.player_position = (2, 5)
-m.enemy_positions = [(1, 1), (8, 8)]
+# m.player_position = (2, 5)
+# m.enemy_positions = [(1, 1), (8, 8)]
 m.trash_piles = [(1, 3)]
+
+m.player_position = (2, 0)
+m.enemy_positions = [(0, 0)]
 
 undo_history = undo.UndoHistory()
 
@@ -81,6 +84,7 @@ def on_keypress(key: str) -> None:
         old_player_position = m.player_position
         old_enemy_positions = m.enemy_positions.copy()
         old_trash_piles = m.trash_piles.copy()
+        print('old_enemy_positions' + str(old_enemy_positions))
 
         move_player_according_to_keypress(key)
         m.move_all_enemies()
@@ -88,6 +92,7 @@ def on_keypress(key: str) -> None:
         new_player_position = m.player_position
         new_enemy_positions = m.enemy_positions.copy()
         new_trash_piles = m.trash_piles.copy()
+        print('new_enemy_positions' + str(new_enemy_positions))
 
         def do_function() -> None:
             m.player_position = new_player_position
@@ -107,6 +112,8 @@ def on_keypress(key: str) -> None:
 
 # TODO: Do 2 steps, undo 2 steps, redo 1 step.
 # TODO: Enemies move 2 steps.
+
+# TODO: Add class GameState with clone-function.
 
 # TODO: Add ControlActions constants and return them from UI instead of keycodes.
 
