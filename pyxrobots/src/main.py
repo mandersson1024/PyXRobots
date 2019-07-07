@@ -66,8 +66,6 @@ def on_keypress(key: str) -> None:
     window_ui.display(m.map_string)
 
 
-# TODO: Add ControlActions constants and return them from UI instead of keycodes.
-
 window_ui = WindowUI(on_keypress)
 window_ui.display(m.map_string)
 window_ui.mainloop()
