@@ -7,9 +7,9 @@ class Keybinder:
         self.bind_func = bind_func
         self.unbind_func = unbind_func
 
-    def bind(self, key: str, func: callable):
+    def bind(self, key: str, func: callable) -> None:
         self.bind_func(key, func)
 
-    def unbind(self, key: str):
-        self.bind_func(key)
+    def unbind(self, key: str) -> None:
+        self.unbind_func(key)
 
