@@ -1,7 +1,7 @@
 
 from ui import *
 from patterns.state_machine import *
-from ingame_data import *
+from display_utils import *
 
 
 class PyxState(State):
@@ -22,15 +22,15 @@ class MainMenuState(PyxState):
 
     def enter(self) -> None:
         print('entering ' + self.__class__.__name__)
-        self.state_machine.ui.bind_key('<Return>', self.state_machine.enter_ingame_state)
+        self.state_machine.ui.bind_key('<KeyPress>', self.state_machine.enter_ingame_state)
         self.render()
 
     def exit(self) -> None:
         print('exiting ' + self.__class__.__name__)
-        self.state_machine.ui.unbind_key('<Return>')
+        self.state_machine.ui.unbind_key('<KeyPress>')
 
     def render(self) -> None:
-        self.state_machine.ui.display("MainMenuState")
+        self.state_machine.ui.display(main_menu_text)
 
 
 class IngameState(PyxState):
