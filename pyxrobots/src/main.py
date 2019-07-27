@@ -1,9 +1,7 @@
 
 from map import *
 from ui import *
-from main_menu import *
-import undo
-
+from patterns import undo
 
 show_main_menu: bool = True
 

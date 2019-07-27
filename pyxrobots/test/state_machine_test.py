@@ -1,15 +1,15 @@
 import unittest
-import state_machine as sm
+from patterns import state_machine
 
 
 class StateMachineTestCase(unittest.TestCase):
 
     def test_creation(self):
-        machine = sm.StateMachine()
+        machine = state_machine.StateMachine()
         self.assertEqual(machine.currentState, machine.nullState)
 
     def test_state_changes(self):
-        class TestState(sm.State):
+        class TestState(state_machine.State):
             enter_was_called: bool = False
             exit_was_called: bool = False
 
@@ -19,7 +19,7 @@ class StateMachineTestCase(unittest.TestCase):
             def exit(self):
                 self.exit_was_called = True
 
-        machine = sm.StateMachine()
+        machine = state_machine.StateMachine()
         state1 = TestState()
         state2 = TestState()
         self.assertFalse(state1.enter_was_called)

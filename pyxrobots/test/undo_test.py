@@ -1,5 +1,5 @@
 import unittest
-import undo
+from patterns import undo
 
 
 class CommandTestCase(unittest.TestCase):
