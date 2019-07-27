@@ -22,12 +22,12 @@ class MainMenuState(PyxState):
 
     def enter(self) -> None:
         print('entering ' + self.__class__.__name__)
-        self.state_machine.ui.bind_key('<KeyPress>', self.state_machine.enter_ingame_state)
+        self.state_machine.ui.bind_key('<Return>', self.state_machine.enter_ingame_state)
         self.render()
 
     def exit(self) -> None:
         print('exiting ' + self.__class__.__name__)
-        self.state_machine.ui.unbind_key('<KeyPress>')
+        self.state_machine.ui.unbind_key('<Return>')
 
     def render(self) -> None:
         self.state_machine.ui.display(main_menu_text)
@@ -38,18 +38,25 @@ class IngameState(PyxState):
 
     def __init__(self, state_machine: 'PyxStateMachine'):
         super().__init__(state_machine)
-        self.data = IngameData()
-        self.data.player = (2, 0)
-        self.data.enemies = [(0, 0)]
 
     def get_move_command(self, move_func: callable) -> callable:
         def move_command() -> None:
             move_func()
-            self.update()
+            self.data.move_all_enemies()
+            dead = self.data.check_for_death()
+            if dead:
+                self.state_machine.enter_game_over_state()
+            else:
+                self.render()
         return move_command
 
     def enter(self) -> None:
         print('entering ' + self.__class__.__name__)
+
+        self.data = IngameData()
+        self.data.player = (2, 0)
+        self.data.enemies = [(0, 0)]
+
         self.state_machine.ui.bind_key('q', self.get_move_command(self.data.player_move_up_left))
         self.state_machine.ui.bind_key('7', self.get_move_command(self.data.player_move_up_left))
         self.state_machine.ui.bind_key('w', self.get_move_command(self.data.player_move_up))
@@ -91,10 +98,6 @@ class IngameState(PyxState):
         self.state_machine.ui.unbind_key('c')
         self.state_machine.ui.unbind_key('3')
 
-    def update(self):
-        self.data.move_all_enemies()
-        self.render()
-
     def data_to_string(self) -> str:
         s = ''
 
@@ -122,13 +125,15 @@ class GameOverState(PyxState):
 
     def enter(self):
         print('entering ' + self.__class__.__name__)
+        self.state_machine.ui.bind_key('<Return>', self.state_machine.enter_main_menu_state)
         self.render()
 
     def exit(self):
         print('exiting ' + self.__class__.__name__)
+        self.state_machine.ui.unbind_key('<Return>')
 
     def render(self) -> None:
-        self.state_machine.ui.display("GameOverState")
+        self.state_machine.ui.display(game_over_text)
 
 
 class PyxStateMachine(StateMachine):

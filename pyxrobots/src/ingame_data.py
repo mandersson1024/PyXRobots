@@ -16,15 +16,6 @@ class IngameData:
         self.enemies = []
         self.trash_piles = []
 
-    def clone(self):
-        state = IngameData()
-        state.width = self.width
-        state.height = self.height
-        state.player = self.player
-        state.enemies = self.enemies.copy()
-        state.trash_piles = self.trash_piles.copy()
-        return state
-
     def is_position_within_bounds(self, pos) -> bool:
         x = pos[0]
         y = pos[1]
@@ -71,4 +62,14 @@ class IngameData:
         dx = self.player[0] - enemy_pos[0]
         dy = self.player[1] - enemy_pos[1]
         self.enemies[index] = (enemy_pos[0] + sign(dx), enemy_pos[1] + sign(dy))
+
+    def overlaps_any_enemy(self, pos: tuple) -> bool:
+        for enemy in self.enemies:
+            if enemy == pos:
+                return True
+            else:
+                return False
+
+    def check_for_death(self) -> bool:
+        return self.overlaps_any_enemy(self.player)
 
