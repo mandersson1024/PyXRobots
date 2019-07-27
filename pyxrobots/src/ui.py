@@ -3,13 +3,10 @@ import tkinter as tk
 
 
 class WindowUI(tk.Tk):
-    def __init__(self, keypress_callback: callable):
+
+    def __init__(self):
         super().__init__()
-
-        def on_key_release(event) -> None:
-            keypress_callback(event.keysym)
-
-        self.bind("<KeyRelease>", on_key_release)
+        self.bind('<Escape>', exit)
         self.label = tk.Label(self, font=("Courier", 16), padx=25, pady=25)
 
     def display(self, s: str) -> None:

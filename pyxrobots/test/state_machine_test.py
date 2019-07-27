@@ -6,7 +6,7 @@ class StateMachineTestCase(unittest.TestCase):
 
     def test_creation(self):
         machine = state_machine.StateMachine()
-        self.assertEqual(machine.currentState, machine.nullState)
+        self.assertEqual(machine.current_state, machine.null_state)
 
     def test_state_changes(self):
         class TestState(state_machine.State):

@@ -1,4 +1,6 @@
+
 from utils import *
+
 
 keys_up_left = ['q', '7']
 keys_up = ['w', '8']
@@ -11,22 +13,24 @@ keys_down = ['x', '2']
 keys_down_right = ['c', '3']
 
 
-class GameState:
+class IngameData:
     width: int
     height: int
     player: tuple
     enemies: list
     trash_piles: list
 
-    def __init__(self, width: int, height: int) -> None:
-        self.width = width
-        self.height = height
+    def __init__(self) -> None:
+        self.width = 30
+        self.height = 22
         self.player = (0, 0)
         self.enemies = []
         self.trash_piles = []
 
     def clone(self):
-        state = GameState(self.width, self.height)
+        state = IngameData()
+        state.width = self.width
+        state.height = self.height
         state.player = self.player
         state.enemies = self.enemies.copy()
         state.trash_piles = self.trash_piles.copy()
@@ -98,27 +102,3 @@ class GameState:
             self.player_move_down()
         elif key in keys_down_right:
             self.player_move_down_right()
-
-
-class Map:
-    state: GameState
-
-    def __init__(self) -> None:
-        self.state = GameState(1, 1)
-
-    @property
-    def map_string(self) -> str:
-        s = ""
-
-        for y in range(0, self.state.height):
-            for x in range(0, self.state.width):
-                if (x, y) == self.state.player:
-                    s += '@'
-                elif (x, y) in self.state.enemies:
-                    s += '+'
-                else:
-                    s += '·'
-            s += '\n'
-
-        s = s.strip("\n")
-        return s

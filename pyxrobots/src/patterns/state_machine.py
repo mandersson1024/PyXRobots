@@ -1,5 +1,7 @@
 
 class State:
+    state_machine: 'StateMachine'
+
     def __init__(self):
         pass
 
@@ -15,15 +17,15 @@ class NullState(State):
 
 
 class StateMachine:
-    nullState: State
-    currentState: State
+    null_state: State
+    current_state: State
 
     def __init__(self):
-        self.nullState = NullState()
-        self.currentState = self.nullState
+        self.null_state = NullState()
+        self.current_state = self.null_state
 
     def enter_state(self, state: State):
-        self.currentState.exit()
-        self.currentState = state
-        self.currentState.enter()
+        self.current_state.exit()
+        self.current_state = state
+        self.current_state.enter()
 
