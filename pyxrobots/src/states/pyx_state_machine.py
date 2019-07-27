@@ -1,5 +1,5 @@
 
-from keybinder import *
+from ui import *
 from patterns.state_machine import *
 from ingame_data import *
 
@@ -11,8 +11,8 @@ class PyxState(State):
         super().__init__()
         self.state_machine = state_machine
 
-    def render(self) -> str:
-        return "PyxState"
+    def render(self) -> None:
+        self.state_machine.ui.display("Not implemented")
 
 
 class MainMenuState(PyxState):
@@ -22,18 +22,15 @@ class MainMenuState(PyxState):
 
     def enter(self) -> None:
         print('entering ' + self.__class__.__name__)
-
-        def on_return(_) -> None:
-            self.state_machine.enter_ingame_state()
-
-        self.state_machine.keybinder.bind('<Return>', on_return)
+        self.state_machine.ui.bind_key('<Return>', self.state_machine.enter_ingame_state)
+        self.render()
 
     def exit(self) -> None:
         print('exiting ' + self.__class__.__name__)
-        self.state_machine.keybinder.unbind('<Return>')
+        self.state_machine.ui.unbind_key('<Return>')
 
-    def render(self) -> str:
-        return "MainMenuState"
+    def render(self) -> None:
+        self.state_machine.ui.display("MainMenuState")
 
 
 class IngameState(PyxState):
@@ -45,20 +42,77 @@ class IngameState(PyxState):
         self.data.player = (2, 0)
         self.data.enemies = [(0, 0)]
 
-    def enter(self):
+    def get_move_command(self, move_func: callable) -> callable:
+        def move_command() -> None:
+            move_func()
+            self.update()
+        return move_command
+
+    def enter(self) -> None:
         print('entering ' + self.__class__.__name__)
+        self.state_machine.ui.bind_key('q', self.get_move_command(self.data.player_move_up_left))
+        self.state_machine.ui.bind_key('7', self.get_move_command(self.data.player_move_up_left))
+        self.state_machine.ui.bind_key('w', self.get_move_command(self.data.player_move_up))
+        self.state_machine.ui.bind_key('8', self.get_move_command(self.data.player_move_up))
+        self.state_machine.ui.bind_key('e', self.get_move_command(self.data.player_move_up_right))
+        self.state_machine.ui.bind_key('9', self.get_move_command(self.data.player_move_up_right))
+        self.state_machine.ui.bind_key('a', self.get_move_command(self.data.player_move_left))
+        self.state_machine.ui.bind_key('4', self.get_move_command(self.data.player_move_left))
+        self.state_machine.ui.bind_key('a', self.get_move_command(self.data.player_dont_move))
+        self.state_machine.ui.bind_key('5', self.get_move_command(self.data.player_dont_move))
+        self.state_machine.ui.bind_key('d', self.get_move_command(self.data.player_move_right))
+        self.state_machine.ui.bind_key('6', self.get_move_command(self.data.player_move_right))
+        self.state_machine.ui.bind_key('z', self.get_move_command(self.data.player_move_down_left))
+        self.state_machine.ui.bind_key('1', self.get_move_command(self.data.player_move_down_left))
+        self.state_machine.ui.bind_key('x', self.get_move_command(self.data.player_move_down))
+        self.state_machine.ui.bind_key('2', self.get_move_command(self.data.player_move_down))
+        self.state_machine.ui.bind_key('c', self.get_move_command(self.data.player_move_down_right))
+        self.state_machine.ui.bind_key('3', self.get_move_command(self.data.player_move_down_right))
+        self.render()
 
     def exit(self):
         print('exiting ' + self.__class__.__name__)
+        self.state_machine.ui.unbind_key('q')
+        self.state_machine.ui.unbind_key('7')
+        self.state_machine.ui.unbind_key('w')
+        self.state_machine.ui.unbind_key('8')
+        self.state_machine.ui.unbind_key('e')
+        self.state_machine.ui.unbind_key('9')
+        self.state_machine.ui.unbind_key('a')
+        self.state_machine.ui.unbind_key('4')
+        self.state_machine.ui.unbind_key('a')
+        self.state_machine.ui.unbind_key('5')
+        self.state_machine.ui.unbind_key('d')
+        self.state_machine.ui.unbind_key('6')
+        self.state_machine.ui.unbind_key('z')
+        self.state_machine.ui.unbind_key('1')
+        self.state_machine.ui.unbind_key('x')
+        self.state_machine.ui.unbind_key('2')
+        self.state_machine.ui.unbind_key('c')
+        self.state_machine.ui.unbind_key('3')
 
     def update(self):
-        # ingame_data.move_player_according_to_keypress(key)
-        # ingame_data.move_all_enemies()
-        pass
+        self.data.move_all_enemies()
+        self.render()
 
-    def render(self) -> str:
-        return "IngameState"
-        # window_ui.display(m.map_string)
+    def data_to_string(self) -> str:
+        s = ''
+
+        for y in range(0, self.data.height):
+            for x in range(0, self.data.width):
+                if (x, y) == self.data.player:
+                    s += '@'
+                elif (x, y) in self.data.enemies:
+                    s += '+'
+                else:
+                    s += '·'
+            s += '\n'
+
+        s = s.strip("\n")
+        return s
+
+    def render(self) -> None:
+        self.state_machine.ui.display(self.data_to_string())
 
 
 class GameOverState(PyxState):
@@ -68,24 +122,25 @@ class GameOverState(PyxState):
 
     def enter(self):
         print('entering ' + self.__class__.__name__)
+        self.render()
 
     def exit(self):
         print('exiting ' + self.__class__.__name__)
 
-    def render(self) -> str:
-        return "GameOverState"
+    def render(self) -> None:
+        self.state_machine.ui.display("GameOverState")
 
 
 class PyxStateMachine(StateMachine):
+    ui: WindowUI
     current_state: PyxState
-    keybinder: Keybinder
     main_menu_state: MainMenuState
     ingame_state: IngameState
     game_over_state: GameOverState
 
-    def __init__(self, keybinder: Keybinder):
+    def __init__(self, ui: WindowUI):
         super().__init__()
-        self.keybinder = keybinder
+        self.ui = ui
         self.main_menu_state = MainMenuState(self)
         self.ingame_state = IngameState(self)
         self.game_over_state = GameOverState(self)

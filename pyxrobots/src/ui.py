@@ -14,3 +14,11 @@ class WindowUI(tk.Tk):
         self.label.pack()
         self.update()
 
+    def bind_key(self, key: str, func: callable) -> None:
+        def on_key(_) -> None:
+            func()
+        self.bind(key, on_key)
+
+    def unbind_key(self, key: str) -> None:
+        self.unbind(key)
+

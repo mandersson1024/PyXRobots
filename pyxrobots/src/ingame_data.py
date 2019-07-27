@@ -2,17 +2,6 @@
 from utils import *
 
 
-keys_up_left = ['q', '7']
-keys_up = ['w', '8']
-keys_up_right = ['e', '9']
-keys_left = ['a', '4']
-keys_pass = ['s', '5']
-keys_right = ['d', '6']
-keys_down_left = ['z', '1']
-keys_down = ['x', '2']
-keys_down_right = ['c', '3']
-
-
 class IngameData:
     width: int
     height: int
@@ -83,22 +72,3 @@ class IngameData:
         dy = self.player[1] - enemy_pos[1]
         self.enemies[index] = (enemy_pos[0] + sign(dx), enemy_pos[1] + sign(dy))
 
-    def move_player_according_to_keypress(self, key: str) -> None:
-        if key in keys_up_left:
-            self.player_move_up_left()
-        elif key in keys_up:
-            self.player_move_up()
-        if key in keys_up_right:
-            self.player_move_up_right()
-        elif key in keys_left:
-            self.player_move_left()
-        elif key in keys_pass:
-            self.player_dont_move()
-        if key in keys_right:
-            self.player_move_right()
-        elif key in keys_down_left:
-            self.player_move_down_left()
-        if key in keys_down:
-            self.player_move_down()
-        elif key in keys_down_right:
-            self.player_move_down_right()
