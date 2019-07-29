@@ -9,7 +9,7 @@ from states.pyx_state_machine import PyxStateMachine
 
 window_ui = WindowUI()
 state_machine = PyxStateMachine(window_ui)
-state_machine.enter_main_menu_state()
+state_machine.enter_state_main_menu()
 window_ui.mainloop()
 
 # window_ui.display(state_machine.current_state.render())

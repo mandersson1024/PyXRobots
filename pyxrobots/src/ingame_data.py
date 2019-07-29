@@ -1,5 +1,6 @@
 
 from utils import *
+import random
 
 
 class IngameData:
@@ -12,9 +13,51 @@ class IngameData:
     def __init__(self) -> None:
         self.width = 30
         self.height = 22
-        self.player = (0, 0)
         self.enemies = []
         self.trash_piles = []
+        self.player = (-1, -1)
+        random.seed(42)
+        self.randomly_place_player()
+        self.randomly_place_enemies(15)
+
+    def get_random_position(self) -> tuple:
+        x = random.randint(0, self.width - 1)
+        y = random.randint(0, self.height - 1)
+        return x, y
+
+    def player_is_at_position(self, pos: tuple) -> bool:
+        if pos == self.player:
+            return False
+
+    def any_enemy_is_at_position(self, pos: tuple) -> bool:
+        return pos in self.enemies
+
+    def any_trash_pile_is_at_position(self, pos: tuple) -> bool:
+        return pos in self.trash_piles
+
+    def position_is_empty(self, pos: tuple) -> bool:
+        if self.player_is_at_position(pos):
+            return False
+        elif self.any_enemy_is_at_position(pos):
+            return False
+        elif self.any_trash_pile_is_at_position(pos):
+            return False
+        else:
+            return True
+
+    def get_random_empty_position(self) -> tuple:
+        pos = self.get_random_position()
+        while not self.position_is_empty(pos):
+            pos = self.get_random_position()
+        return pos
+
+    def randomly_place_player(self) -> None:
+        self.player = self.get_random_empty_position()
+
+    def randomly_place_enemies(self, num_enemies: int) -> None:
+        for x in range(num_enemies):
+            pos = self.get_random_empty_position()
+            self.enemies.append(pos)
 
     def is_position_within_bounds(self, pos) -> bool:
         x = pos[0]
@@ -64,11 +107,7 @@ class IngameData:
         self.enemies[index] = (enemy_pos[0] + sign(dx), enemy_pos[1] + sign(dy))
 
     def overlaps_any_enemy(self, pos: tuple) -> bool:
-        for enemy in self.enemies:
-            if enemy == pos:
-                return True
-            else:
-                return False
+        return pos in self.enemies
 
     def check_for_death(self) -> bool:
         return self.overlaps_any_enemy(self.player)
