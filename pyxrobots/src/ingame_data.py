@@ -137,6 +137,8 @@ class IngameData:
     def overlaps_any_enemy(self, pos: tuple) -> bool:
         return pos in self.enemies
 
-    def check_for_player_death(self) -> bool:
+    def player_died(self) -> bool:
         return self.overlaps_any_enemy(self.player)
 
+    def level_complete(self) -> bool:
+        return len(self.enemies) == 0

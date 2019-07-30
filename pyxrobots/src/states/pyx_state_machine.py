@@ -45,9 +45,11 @@ class IngameState(PyxState):
             self.data.move_all_enemies()
             self.data.spawn_trash_piles()
             self.data.kill_enemies()
-            player_dead = self.data.check_for_player_death()
-            if player_dead:
+            if self.data.player_died():
                 self.state_machine.enter_state_game_over()
+            elif self.data.level_complete():
+                pass
+                # todo: self.state_machine.enter_state_level_complete()
             else:
                 self.render()
         return move_command
