@@ -52,11 +52,13 @@ class IngameState(PyxState):
                 self.render()
         return move_command
 
-    def get_blink_command(self) -> callable:
-        def blink_command() -> None:
-            self.data.blink()
-            self.render()
-        return blink_command
+    def blink_command(self) -> None:
+        self.data.blink()
+        self.render()
+
+    def flux_shield_command(self) -> None:
+        self.data.flux_shield()
+        self.render()
 
     def enter(self) -> None:
         print('entering ' + self.__class__.__name__)
@@ -81,7 +83,8 @@ class IngameState(PyxState):
         self.state_machine.ui.bind_key('1', self.get_move_command(self.data.player_move_down_left))
         self.state_machine.ui.bind_key('2', self.get_move_command(self.data.player_move_down))
         self.state_machine.ui.bind_key('3', self.get_move_command(self.data.player_move_down_right))
-        self.state_machine.ui.bind_key('b', self.get_blink_command())
+        self.state_machine.ui.bind_key('b', self.blink_command)
+        self.state_machine.ui.bind_key('f', self.flux_shield_command)
         self.render()
 
     def exit(self):
@@ -105,6 +108,7 @@ class IngameState(PyxState):
         self.state_machine.ui.unbind_key('8')
         self.state_machine.ui.unbind_key('9')
         self.state_machine.ui.unbind_key('b')
+        self.state_machine.ui.unbind_key('f')
 
     def render(self) -> None:
         self.state_machine.ui.display(ingame_data_to_map_string(self.data))

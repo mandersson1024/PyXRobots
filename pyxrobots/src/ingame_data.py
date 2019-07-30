@@ -99,6 +99,15 @@ class IngameData:
     def blink(self) -> None:
         self.player = self.get_random_empty_position()
 
+    def flux_shield(self) -> None:
+        for x in range(-1, 2):
+            for y in range(-1, 2):
+                pos = (self.player[0] + x, self.player[1] + y)
+                if pos in self.enemies:
+                    self.enemies.remove(pos)
+                if pos in self.trash_piles:
+                    self.trash_piles.remove(pos)
+
     def move_all_enemies(self) -> None:
         for index in range(len(self.enemies)):
             self.move_enemy(index)
