@@ -100,15 +100,31 @@ class IngameData:
         for index in range(len(self.enemies)):
             self.move_enemy(index)
 
-    def move_enemy(self, index):
+    def move_enemy(self, index) -> None:
         enemy_pos = self.enemies[index]
         dx = self.player[0] - enemy_pos[0]
         dy = self.player[1] - enemy_pos[1]
         self.enemies[index] = (enemy_pos[0] + sign(dx), enemy_pos[1] + sign(dy))
 
+    def spawn_trash_piles(self) -> None:
+        for enemy in self.enemies:
+            count = self.enemies.count(enemy)
+            if count >= 2:
+                self.spawn_trash_pile_at(enemy)
+
+    def spawn_trash_pile_at(self, pos: tuple) -> None:
+        if not (pos in self.trash_piles):
+            self.trash_piles.append(pos)
+
+    def kill_enemies(self) -> None:
+        enemy_positions = list(self.enemies)
+        for enemy in enemy_positions:
+            if enemy in self.trash_piles:
+                self.enemies.remove(enemy)
+
     def overlaps_any_enemy(self, pos: tuple) -> bool:
         return pos in self.enemies
 
-    def check_for_death(self) -> bool:
+    def check_for_player_death(self) -> bool:
         return self.overlaps_any_enemy(self.player)
 

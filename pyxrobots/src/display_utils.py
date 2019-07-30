@@ -3,7 +3,7 @@ from ingame_data import *
 
 
 def ingame_data_to_map_string(data: IngameData) -> str:
-    s = ""
+    s = ''
 
     for y in range(0, data.height - 1):
         for x in range(0, data.width - 1):
@@ -11,6 +11,8 @@ def ingame_data_to_map_string(data: IngameData) -> str:
                 s += '@'
             elif (x, y) in data.enemies:
                 s += '+'
+            elif (x, y) in data.trash_piles:
+                s += '#'
             else:
                 s += '·'
         s += '\n'

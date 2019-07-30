@@ -43,8 +43,10 @@ class IngameState(PyxState):
         def move_command() -> None:
             move_func()
             self.data.move_all_enemies()
-            dead = self.data.check_for_death()
-            if dead:
+            self.data.spawn_trash_piles()
+            self.data.kill_enemies()
+            player_dead = self.data.check_for_player_death()
+            if player_dead:
                 self.state_machine.enter_state_game_over()
             else:
                 self.render()
@@ -96,24 +98,8 @@ class IngameState(PyxState):
         self.state_machine.ui.unbind_key('8')
         self.state_machine.ui.unbind_key('9')
 
-    def data_to_string(self) -> str:
-        s = ''
-
-        for y in range(0, self.data.height):
-            for x in range(0, self.data.width):
-                if (x, y) == self.data.player:
-                    s += '@'
-                elif (x, y) in self.data.enemies:
-                    s += '+'
-                else:
-                    s += '·'
-            s += '\n'
-
-        s = s.strip("\n")
-        return s
-
     def render(self) -> None:
-        self.state_machine.ui.display(self.data_to_string())
+        self.state_machine.ui.display(ingame_data_to_map_string(self.data))
 
 
 class GameOverState(PyxState):
