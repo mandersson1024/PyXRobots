@@ -96,6 +96,9 @@ class IngameData:
     def player_move_down_right(self) -> None:
         self.player_move(1, 1)
 
+    def blink(self) -> None:
+        self.player = self.get_random_empty_position()
+
     def move_all_enemies(self) -> None:
         for index in range(len(self.enemies)):
             self.move_enemy(index)
