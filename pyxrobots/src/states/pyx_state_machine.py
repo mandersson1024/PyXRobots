@@ -1,6 +1,6 @@
 
 from ui import *
-from patterns.state_machine import *
+from states.state_machine import *
 from display_utils import *
 
 

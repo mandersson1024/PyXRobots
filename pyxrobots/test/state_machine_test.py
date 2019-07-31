@@ -1,5 +1,5 @@
 import unittest
-from patterns import state_machine
+from states import state_machine
 
 
 class StateMachineTestCase(unittest.TestCase):
