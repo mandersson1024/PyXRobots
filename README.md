@@ -4,7 +4,7 @@ Python clone of the game xrobots, which is a clone of a game originally called C
 
 ## Author
 
-* **Mikael Andersson**
+Mikael Andersson
 
 ## License
 
