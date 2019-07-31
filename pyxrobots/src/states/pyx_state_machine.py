@@ -48,18 +48,13 @@ class IngameState(PyxState):
             if self.data.player_died():
                 self.state_machine.enter_state_game_over()
             elif self.data.level_complete():
-                pass
-                # todo: self.state_machine.enter_state_level_complete()
+                self.state_machine.enter_state_level_complete()
             else:
                 self.render()
         return move_command
 
     def blink_command(self) -> None:
         self.data.blink()
-        self.render()
-
-    def flux_shield_command(self) -> None:
-        self.data.flux_shield()
         self.render()
 
     def enter(self) -> None:
@@ -86,7 +81,6 @@ class IngameState(PyxState):
         self.state_machine.ui.bind_key('2', self.get_move_command(self.data.player_move_down))
         self.state_machine.ui.bind_key('3', self.get_move_command(self.data.player_move_down_right))
         self.state_machine.ui.bind_key('b', self.blink_command)
-        self.state_machine.ui.bind_key('f', self.flux_shield_command)
         self.render()
 
     def exit(self):
@@ -110,7 +104,6 @@ class IngameState(PyxState):
         self.state_machine.ui.unbind_key('8')
         self.state_machine.ui.unbind_key('9')
         self.state_machine.ui.unbind_key('b')
-        self.state_machine.ui.unbind_key('f')
 
     def render(self) -> None:
         self.state_machine.ui.display(ingame_data_to_map_string(self.data))
@@ -134,11 +127,30 @@ class GameOverState(PyxState):
         self.state_machine.ui.display(game_over_text)
 
 
+class LevelCompleteState(PyxState):
+
+    def __init__(self, state_machine: 'PyxStateMachine'):
+        super().__init__(state_machine)
+
+    def enter(self):
+        print('entering ' + self.__class__.__name__)
+        self.state_machine.ui.bind_key('<Return>', self.state_machine.enter_state_ingame)
+        self.render()
+
+    def exit(self):
+        print('exiting ' + self.__class__.__name__)
+        self.state_machine.ui.unbind_key('<Return>')
+
+    def render(self) -> None:
+        self.state_machine.ui.display(level_complete_text)
+
+
 class PyxStateMachine(StateMachine):
     ui: WindowUI
     current_state: PyxState
     main_menu_state: MainMenuState
     ingame_state: IngameState
+    level_complete_state: LevelCompleteState
     game_over_state: GameOverState
 
     def __init__(self, ui: WindowUI):
@@ -146,6 +158,7 @@ class PyxStateMachine(StateMachine):
         self.ui = ui
         self.main_menu_state = MainMenuState(self)
         self.ingame_state = IngameState(self)
+        self.level_complete_state = LevelCompleteState(self)
         self.game_over_state = GameOverState(self)
 
     def enter_state_main_menu(self) -> None:
@@ -156,5 +169,8 @@ class PyxStateMachine(StateMachine):
 
     def enter_state_game_over(self) -> None:
         self.enter_state(self.game_over_state)
+
+    def enter_state_level_complete(self) -> None:
+        self.enter_state(self.level_complete_state)
 
 
