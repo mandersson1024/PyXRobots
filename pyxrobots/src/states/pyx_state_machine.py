@@ -49,7 +49,8 @@ class IngameState(PyxState):
                 self.state_machine.enter_state_game_over()
             else:
                 self.data.spawn_trash_piles()
-                self.data.kill_enemies()
+                num_kills = self.data.kill_enemies()
+                self.state_machine.game_info.score += num_kills
                 if self.data.level_complete():
                     self.state_machine.enter_state_level_complete()
                 else:

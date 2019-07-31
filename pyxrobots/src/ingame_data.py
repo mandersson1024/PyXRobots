@@ -135,11 +135,14 @@ class IngameData:
         if not (pos in self.trash_piles):
             self.trash_piles.append(pos)
 
-    def kill_enemies(self) -> None:
+    def kill_enemies(self) -> int:
+        num_kills: int = 0
         enemy_positions = list(self.enemies)
         for enemy in enemy_positions:
             if enemy in self.trash_piles:
                 self.enemies.remove(enemy)
+                num_kills += 1
+        return num_kills
 
     def overlaps_any_enemy(self, pos: tuple) -> bool:
         return pos in self.enemies
