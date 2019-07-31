@@ -67,7 +67,8 @@ class IngameData:
     def player_move(self, dx, dy) -> None:
         new_position = (self.player[0] + dx, self.player[1] + dy)
         if self.is_position_within_bounds(new_position):
-            self.player = new_position
+            if not (new_position in self.trash_piles):
+                self.player = new_position
 
     def player_move_up_left(self) -> None:
         self.player_move(-1, -1)
