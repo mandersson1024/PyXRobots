@@ -6,12 +6,10 @@ from display_utils import *
 
 class PyxState(State):
     state_machine: 'PyxStateMachine'
-    game_info: GameInfo
 
     def __init__(self, state_machine: 'PyxStateMachine'):
         super().__init__()
         self.state_machine = state_machine
-        self.game_info = GameInfo()
 
     def render(self) -> None:
         self.state_machine.ui.display("Not implemented", "?")
@@ -30,9 +28,10 @@ class MainMenuState(PyxState):
     def exit(self) -> None:
         print('exiting ' + self.__class__.__name__)
         self.state_machine.ui.unbind_key('<Return>')
+        self.state_machine.game_info = GameInfo()
 
     def render(self) -> None:
-        self.state_machine.ui.display(main_menu_text, game_info_to_string(self.game_info))
+        self.state_machine.ui.display(main_menu_text, game_info_to_string(self.state_machine.game_info))
 
 
 class IngameState(PyxState):
@@ -45,23 +44,27 @@ class IngameState(PyxState):
         def move_command() -> None:
             move_func()
             self.data.move_all_enemies()
-            self.data.spawn_trash_piles()
-            self.data.kill_enemies()
+
             if self.data.player_died():
                 self.state_machine.enter_state_game_over()
-            elif self.data.level_complete():
-                self.state_machine.enter_state_level_complete()
             else:
-                self.render()
+                self.data.spawn_trash_piles()
+                self.data.kill_enemies()
+                if self.data.level_complete():
+                    self.state_machine.enter_state_level_complete()
+                else:
+                    self.render()
         return move_command
 
     def blink_command(self) -> None:
         self.data.blink()
+        self.state_machine.game_info.blinks += 1
         self.render()
 
     def enter(self) -> None:
         print('entering ' + self.__class__.__name__)
 
+        self.state_machine.game_info.level += 1
         self.data = IngameData()
 
         self.state_machine.ui.bind_key('q', self.get_move_command(self.data.player_move_up_left))
@@ -108,7 +111,7 @@ class IngameState(PyxState):
         self.state_machine.ui.unbind_key('b')
 
     def render(self) -> None:
-        self.state_machine.ui.display(ingame_data_to_map_string(self.data), game_info_to_string(self.game_info))
+        self.state_machine.ui.display(ingame_data_to_map_string(self.data), game_info_to_string(self.state_machine.game_info))
 
 
 class GameOverState(PyxState):
@@ -126,7 +129,7 @@ class GameOverState(PyxState):
         self.state_machine.ui.unbind_key('<Return>')
 
     def render(self) -> None:
-        self.state_machine.ui.display(game_over_text, game_info_to_string(self.game_info))
+        self.state_machine.ui.display(game_over_text, game_info_to_string(self.state_machine.game_info))
 
 
 class LevelCompleteState(PyxState):
@@ -144,7 +147,7 @@ class LevelCompleteState(PyxState):
         self.state_machine.ui.unbind_key('<Return>')
 
     def render(self) -> None:
-        self.state_machine.ui.display(level_complete_text, game_info_to_string(self.game_info))
+        self.state_machine.ui.display(level_complete_text, game_info_to_string(self.state_machine.game_info))
 
 
 class PyxStateMachine(StateMachine):
@@ -154,10 +157,12 @@ class PyxStateMachine(StateMachine):
     ingame_state: IngameState
     level_complete_state: LevelCompleteState
     game_over_state: GameOverState
+    game_info: GameInfo
 
     def __init__(self, ui: WindowUI):
         super().__init__()
         self.ui = ui
+        self.game_info = GameInfo()
         self.main_menu_state = MainMenuState(self)
         self.ingame_state = IngameState(self)
         self.level_complete_state = LevelCompleteState(self)

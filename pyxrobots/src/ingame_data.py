@@ -15,7 +15,7 @@ class GameInfo:
 
     def level_to_string(self) -> str:
         if self.level <= 0:
-            return '-'
+            return ' '
         else:
             return str(self.level)
 
@@ -33,7 +33,6 @@ class IngameData:
         self.enemies = []
         self.trash_piles = []
         self.player = (-1, -1)
-        random.seed(42)
         self.randomly_place_player()
         self.randomly_place_enemies(15)
 
@@ -83,9 +82,8 @@ class IngameData:
 
     def player_move(self, dx, dy) -> None:
         new_position = (self.player[0] + dx, self.player[1] + dy)
-        if self.is_position_within_bounds(new_position):
-            if not (new_position in self.trash_piles):
-                self.player = new_position
+        if self.is_position_within_bounds(new_position) and self.position_is_empty(new_position):
+            self.player = new_position
 
     def player_move_up_left(self) -> None:
         self.player_move(-1, -1)
