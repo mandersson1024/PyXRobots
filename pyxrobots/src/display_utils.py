@@ -1,7 +1,6 @@
 
 from ingame_data import *
 
-
 def ingame_data_to_map_string(data: IngameData) -> str:
     s = ''
 
@@ -96,3 +95,8 @@ level_complete_text: str = '''
 ······························
 ······························
 '''.strip()
+
+
+def game_info_to_string(info: GameInfo) -> str:
+    return 'level: ' + info.level_to_string() + '  score: ' + str(info.score) + '  blinks: ' + str(info.blinks)
+

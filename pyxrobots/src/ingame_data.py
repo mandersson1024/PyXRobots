@@ -3,6 +3,23 @@ from utils import *
 import random
 
 
+class GameInfo:
+    level: int
+    score: int
+    blinks: int
+
+    def __init__(self):
+        self.level = 0
+        self.score = 0
+        self.blinks = 0
+
+    def level_to_string(self) -> str:
+        if self.level <= 0:
+            return '-'
+        else:
+            return str(self.level)
+
+
 class IngameData:
     width: int
     height: int

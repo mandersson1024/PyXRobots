@@ -3,18 +3,15 @@ import tkinter as tk
 
 
 class WindowUI(tk.Tk):
-    width: int
-    height: int
+    label: tk.Label
 
     def __init__(self):
         super().__init__()
-        self.width = 30
-        self.height = 22
         self.bind('<Escape>', exit)
         self.label = tk.Label(self, font=("Courier", 16), padx=25, pady=25)
 
-    def display(self, s: str) -> None:
-        self.label.config(text=s)
+    def display(self, board: str, info: str) -> None:
+        self.label.config(text=board + '\n\n' + info)
         self.label.pack()
         self.update()
 

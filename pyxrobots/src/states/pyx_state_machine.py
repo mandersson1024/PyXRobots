@@ -6,13 +6,15 @@ from display_utils import *
 
 class PyxState(State):
     state_machine: 'PyxStateMachine'
+    game_info: GameInfo
 
     def __init__(self, state_machine: 'PyxStateMachine'):
         super().__init__()
         self.state_machine = state_machine
+        self.game_info = GameInfo()
 
     def render(self) -> None:
-        self.state_machine.ui.display("Not implemented")
+        self.state_machine.ui.display("Not implemented", "?")
 
 
 class MainMenuState(PyxState):
@@ -30,7 +32,7 @@ class MainMenuState(PyxState):
         self.state_machine.ui.unbind_key('<Return>')
 
     def render(self) -> None:
-        self.state_machine.ui.display(main_menu_text)
+        self.state_machine.ui.display(main_menu_text, game_info_to_string(self.game_info))
 
 
 class IngameState(PyxState):
@@ -106,7 +108,7 @@ class IngameState(PyxState):
         self.state_machine.ui.unbind_key('b')
 
     def render(self) -> None:
-        self.state_machine.ui.display(ingame_data_to_map_string(self.data))
+        self.state_machine.ui.display(ingame_data_to_map_string(self.data), game_info_to_string(self.game_info))
 
 
 class GameOverState(PyxState):
@@ -124,7 +126,7 @@ class GameOverState(PyxState):
         self.state_machine.ui.unbind_key('<Return>')
 
     def render(self) -> None:
-        self.state_machine.ui.display(game_over_text)
+        self.state_machine.ui.display(game_over_text, game_info_to_string(self.game_info))
 
 
 class LevelCompleteState(PyxState):
@@ -142,7 +144,7 @@ class LevelCompleteState(PyxState):
         self.state_machine.ui.unbind_key('<Return>')
 
     def render(self) -> None:
-        self.state_machine.ui.display(level_complete_text)
+        self.state_machine.ui.display(level_complete_text, game_info_to_string(self.game_info))
 
 
 class PyxStateMachine(StateMachine):
